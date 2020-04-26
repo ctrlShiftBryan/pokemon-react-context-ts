@@ -1,10 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { PokemonContext } from "./PokemonContext";
 
 export default function PokemonsList() {
- const { pokemons, capture } = useContext(PokemonContext);
+  const url = "https://pokeapi.co/api/v2/pokemon";
 
+  const { pokemons, capture, addPokemons } = useContext(PokemonContext);
 
+  let data;
+  useEffect(() => {
+    const fetchPokemons = async () => {
+      const response = await fetch(url);
+      // TODO still don't really understand this infinite loop fix hack
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      data = await response.json();
+      addPokemons && addPokemons(data.results);
+    };
+
+    fetchPokemons();
+  }, [data]);
   return (
     <div className="pokemons-list">
       <h2>Pokemons List</h2>

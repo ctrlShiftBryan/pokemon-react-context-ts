@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import {
   ADD_POKEMON,
+  ADD_POKEMONS,
   CAPTURE,
   IState,
   pokemonReducer,
@@ -22,6 +23,7 @@ export interface IPokemonProvider {
   capturedPokemons: IPokemon[];
   release: Function;
   addPokemon: Function;
+  addPokemons: Function;
 }
 export const PokemonContext = createContext<Partial<IPokemonProvider>>({});
 
@@ -48,6 +50,10 @@ export const PokemonProvider = (props: IProviderPokemon) => {
     dispatch({ type: ADD_POKEMON, pokemon });
   };
 
+  const addPokemons = (pokemon: IPokemon[]) => {
+    dispatch({ type: ADD_POKEMONS, pokemon });
+  };
+
   const { pokemons, capturedPokemons } = state;
 
   const providerValue = {
@@ -56,6 +62,7 @@ export const PokemonProvider = (props: IProviderPokemon) => {
     release,
     capture,
     addPokemon,
+    addPokemons,
   };
 
   return (

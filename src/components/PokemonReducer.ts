@@ -3,6 +3,7 @@ import { IPokemon } from "./PokemonContext";
 export const CAPTURE = "CAPTURE";
 export const RELEASE = "RELEASE";
 export const ADD_POKEMON = "ADD_POKEMON";
+export const ADD_POKEMONS = "ADD_POKEMONS";
 
 export interface IState {
   pokemons: IPokemon[];
@@ -11,9 +12,13 @@ export interface IState {
 
 export interface IAction {
   type: string;
-  pokemon: IPokemon;
+  pokemon: any;
 }
 
+export interface IActions {
+  type: string;
+  pokemons: IPokemon[];
+}
 const getCapturedPokemons = (
   capturedPokemons: IPokemon[],
   releasedPokemon: IPokemon
@@ -41,6 +46,11 @@ const addPokemon = (pokemon: IPokemon, state: IState) => ({
   capturedPokemons: state.capturedPokemons,
 });
 
+const addPokemons = (pokemons: IPokemon[], state: IState) => ({
+  ...state,
+  pokemons,
+});
+
 export const pokemonReducer = (state: IState, action: IAction) => {
   switch (action.type) {
     case CAPTURE:
@@ -49,6 +59,8 @@ export const pokemonReducer = (state: IState, action: IAction) => {
       return releasePokemon(action.pokemon, state);
     case ADD_POKEMON:
       return addPokemon(action.pokemon, state);
+    case ADD_POKEMONS:
+      return addPokemons(action.pokemon, state);
     default:
       return state;
   }
