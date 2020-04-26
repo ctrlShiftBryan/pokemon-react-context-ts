@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { PokemonContext } from "./PokemonContext";
 
 export interface IPokemon {
-  id: number;
+  id: string;
   name: string;
 }
 export default function CapturedPokemons() {

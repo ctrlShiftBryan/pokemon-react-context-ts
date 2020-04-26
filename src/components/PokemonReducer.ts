@@ -2,6 +2,7 @@ import { IPokemon } from "./PokemonContext";
 
 export const CAPTURE = "CAPTURE";
 export const RELEASE = "RELEASE";
+export const ADD_POKEMON = "ADD_POKEMON";
 
 export interface IState {
   pokemons: IPokemon[];
@@ -35,12 +36,19 @@ const capturePokemon = (pokemon: IPokemon, state: IState) => ({
   capturedPokemons: [...state.capturedPokemons, pokemon],
 });
 
+const addPokemon = (pokemon: IPokemon, state: IState) => ({
+  pokemons: [...state.pokemons, pokemon],
+  capturedPokemons: state.capturedPokemons,
+});
+
 export const pokemonReducer = (state: IState, action: IAction) => {
   switch (action.type) {
     case CAPTURE:
       return capturePokemon(action.pokemon, state);
     case RELEASE:
       return releasePokemon(action.pokemon, state);
+    case ADD_POKEMON:
+      return addPokemon(action.pokemon, state);
     default:
       return state;
   }

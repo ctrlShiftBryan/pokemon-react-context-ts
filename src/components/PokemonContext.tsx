@@ -1,12 +1,18 @@
 import React, { createContext, useReducer } from "react";
-import { CAPTURE, IState, pokemonReducer, RELEASE } from "./PokemonReducer";
+import {
+  ADD_POKEMON,
+  CAPTURE,
+  IState,
+  pokemonReducer,
+  RELEASE,
+} from "./PokemonReducer";
 
 export interface IProviderPokemon {
   children: any[] | any;
 }
 
 export interface IPokemon {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -15,16 +21,16 @@ export interface IPokemonProvider {
   capture: Function;
   capturedPokemons: IPokemon[];
   release: Function;
-
+  addPokemon: Function;
 }
 export const PokemonContext = createContext<Partial<IPokemonProvider>>({});
 
 export const PokemonProvider = (props: IProviderPokemon) => {
   const defaultState: IState = {
     pokemons: [
-      { id: 1, name: "Bulbasaur" },
-      { id: 2, name: "Charmander" },
-      { id: 3, name: "Squirtle" },
+      { id: "1", name: "Bulbasaur" },
+      { id: "2", name: "Charmander" },
+      { id: "3", name: "Squirtle" },
     ],
     capturedPokemons: [],
   };
@@ -38,6 +44,10 @@ export const PokemonProvider = (props: IProviderPokemon) => {
     dispatch({ type: RELEASE, pokemon });
   };
 
+  const addPokemon = (pokemon: IPokemon) => {
+    dispatch({ type: ADD_POKEMON, pokemon });
+  };
+
   const { pokemons, capturedPokemons } = state;
 
   const providerValue = {
@@ -45,6 +55,7 @@ export const PokemonProvider = (props: IProviderPokemon) => {
     capturedPokemons,
     release,
     capture,
+    addPokemon,
   };
 
   return (
