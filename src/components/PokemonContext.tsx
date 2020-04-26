@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useReducer } from "react";
+import { CAPTURE, IState, pokemonReducer, RELEASE } from "./PokemonReducer";
 
 export interface IProviderPokemon {
   children: any[] | any;
@@ -10,33 +11,45 @@ export interface IPokemon {
 }
 
 export interface IPokemonProvider {
-  pokemons: IPokemon[],
-  setPokemons: Function,
-  capturedPokemons: IPokemon[],
-  setCapturedPokemons: Function,
+  pokemons: IPokemon[];
+  capture: Function;
+  capturedPokemons: IPokemon[];
+  release: Function;
+
 }
 export const PokemonContext = createContext<Partial<IPokemonProvider>>({});
 
 export const PokemonProvider = (props: IProviderPokemon) => {
-  const [pokemons, setPokemons] = useState([
-    { id: 1, name: 'Bulbasaur' },
-    { id: 2, name: 'Charmander' },
-    { id: 3, name: 'Squirtle' }
-  ]);
+  const defaultState: IState = {
+    pokemons: [
+      { id: 1, name: "Bulbasaur" },
+      { id: 2, name: "Charmander" },
+      { id: 3, name: "Squirtle" },
+    ],
+    capturedPokemons: [],
+  };
+  const [state, dispatch] = useReducer(pokemonReducer, defaultState);
 
-  const [capturedPokemons, setCapturedPokemons] = useState<IPokemon[]>([]);
+  const capture = (pokemon: IPokemon) => () => {
+    dispatch({ type: CAPTURE, pokemon });
+  };
+
+  const release = (pokemon: IPokemon) => () => {
+    dispatch({ type: RELEASE, pokemon });
+  };
+
+  const { pokemons, capturedPokemons } = state;
 
   const providerValue = {
     pokemons,
-    setPokemons,
     capturedPokemons,
-    setCapturedPokemons
+    release,
+    capture,
   };
 
   return (
     <PokemonContext.Provider value={providerValue}>
       {props.children}
     </PokemonContext.Provider>
-  )
+  );
 };
-

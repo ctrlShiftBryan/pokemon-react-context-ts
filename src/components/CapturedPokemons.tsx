@@ -5,25 +5,8 @@ export interface IPokemon {
   id: number;
   name: string;
 }
-
 export default function CapturedPokemons() {
-  // const [pokemons] = useState<IPokemon[]>([]);
-
-  const {
-    pokemons,
-    setPokemons,
-    capturedPokemons,
-    setCapturedPokemons,
-  } = useContext(PokemonContext);
-
-  const releasePokemon = (releasedPokemon: IPokemon) =>
-    capturedPokemons &&
-    capturedPokemons.filter((pokemon) => pokemon !== releasedPokemon);
-
-  const release = (pokemon: IPokemon) => () => {
-    setCapturedPokemons && setCapturedPokemons(releasePokemon(pokemon));
-    setPokemons && setPokemons([...(pokemons || []), pokemon]);
-  };
+  const { capturedPokemons, release } = useContext(PokemonContext);
 
   return (
     <div className="pokedex">
@@ -33,7 +16,7 @@ export default function CapturedPokemons() {
         capturedPokemons.map((pokemon) => (
           <div key={`${pokemon.id}-${pokemon.name}`}>
             <span>{pokemon.name}</span>
-            <button onClick={release(pokemon)}>-</button>
+            <button onClick={release && release(pokemon)}>-</button>
           </div>
         ))}
     </div>
